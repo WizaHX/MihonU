@@ -1,0 +1,76 @@
+# After syncing main with upstream, restore this workflow (commit it on yaml first):
+# git switch main
+# git restore --source=yaml -- .github/workflows/release-mihonu.yml
+# git add .github/workflows/release-mihonu.yml
+# git commit -m "Add personal release workflow"
+# git push origin main
+
+name: Release MihonU
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-mihonu
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout selected commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Get version
+        id: version
+        run: |
+          VERSION=$(sed -n 's/^[[:space:]]*versionName = "\([^"]*\)".*/\1/p' app/build.gradle.kts | head -1)
+          test -n "$VERSION"
+          REVISION=1
+          while git show-ref --verify --quiet "refs/tags/mihonu-v$VERSION-$REVISION"; do
+            REVISION=$((REVISION + 1))
+          done
+          echo "version=$VERSION-$REVISION" >> "$GITHUB_OUTPUT"
+
+      - name: Set up JDK
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version-file: .github/.java-version
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+
+      - name: Restore signing keystore
+        env:
+          RELEASE_KEYSTORE_BASE64: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
+        run: printf '%s' "$RELEASE_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/release.keystore"
+
+      - name: Build release APK
+        env:
+          MIHON_GITHUB_RELEASE: 'true'
+          storeFile: ${{ runner.temp }}/release.keystore
+          storePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+          keyAlias: defide
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+        run: ./gradlew :app:assembleRelease -Pdist=github -Pinclude-telemetry=false -Penable-updater=false
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          APK="MihonU-v$VERSION.apk"
+          cp app/build/outputs/apk/release/app-universal-release.apk "$APK"
+          gh release create "mihonu-v$VERSION" "$APK" \
+            --target "$GITHUB_SHA" \
+            --title "MihonU v$VERSION" \
+            --generate-notes \
+            --latest
