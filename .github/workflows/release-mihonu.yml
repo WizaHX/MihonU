@@ -1,3 +1,10 @@
+# After syncing main with upstream, restore this workflow (commit it on yaml first):
+# git switch main
+# git restore --source=yaml -- .github/workflows/release-mihonu.yml
+# git add .github/workflows/release-mihonu.yml
+# git commit -m "Add personal release workflow"
+# git push origin main
+
 name: Release MihonU
 
 on:
