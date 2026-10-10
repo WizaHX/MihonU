@@ -207,8 +207,10 @@ fun MangaActionRow(
             },
             icon = if (favorite) MaterialSymbols.RoundedFilled.Favorite else MaterialSymbols.Rounded.Favorite,
             color = if (favorite) MaterialTheme.colorScheme.primary else defaultActionButtonColor,
-            onClick = onAddToLibraryClicked,
-            onLongClick = onEditCategory,
+            onClick = {
+                if (favorite) onEditCategory?.invoke() else onAddToLibraryClicked()
+            },
+            onLongClick = onAddToLibraryClicked.takeIf { favorite },
         )
         MangaActionButton(
             title = when (nextUpdateDays) {
