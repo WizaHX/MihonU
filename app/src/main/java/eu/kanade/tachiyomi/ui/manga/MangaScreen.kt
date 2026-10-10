@@ -4,6 +4,9 @@ import android.content.Context
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -59,6 +62,8 @@ import tachiyomi.core.common.util.lang.withIOContext
 import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.chapter.model.Chapter
 import tachiyomi.domain.manga.model.Manga
+import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.LoadingScreen
 
 class MangaScreen(
@@ -114,7 +119,11 @@ class MangaScreen(
             onChapterClicked = { openChapter(context, it) },
             onDownloadChapter = viewModel::runChapterDownloadActions.takeIf { !successState.source.isLocalOrStub() },
             onAddToLibraryClicked = {
-                viewModel.toggleFavorite()
+                if (successState.manga.favorite) {
+                    viewModel.showRemoveFromLibraryDialog()
+                } else {
+                    viewModel.toggleFavorite()
+                }
                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
             },
             onWebViewClicked = {
@@ -169,6 +178,26 @@ class MangaScreen(
         val onDismissRequest = { viewModel.dismissDialog() }
         when (val dialog = successState.dialog) {
             null -> {}
+            MangaViewModel.Dialog.RemoveFromLibrary -> {
+                AlertDialog(
+                    onDismissRequest = onDismissRequest,
+                    title = { Text(stringResource(MR.strings.are_you_sure)) },
+                    text = { Text(stringResource(MR.strings.remove_manga, successState.manga.title)) },
+                    confirmButton = {
+                        TextButton(onClick = {
+                            onDismissRequest()
+                            if (successState.manga.favorite) viewModel.toggleFavorite()
+                        }) {
+                            Text(stringResource(MR.strings.action_remove))
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = onDismissRequest) {
+                            Text(stringResource(MR.strings.action_cancel))
+                        }
+                    },
+                )
+            }
             is MangaViewModel.Dialog.ChangeCategory -> {
                 ChangeCategoryDialog(
                     initialSelection = dialog.initialSelection,
