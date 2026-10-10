@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">MihonU</string>
+    <string name="mihonu_crash_description" translatable="false">%s ran into an unexpected error. You can save the crash logs for troubleshooting. Logs are not sent automatically.</string>
 
     <!-- Generic strings -->
     <string name="on">On</string>
