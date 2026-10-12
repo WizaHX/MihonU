@@ -37,8 +37,8 @@ android {
     defaultConfig {
         applicationId = "app.mihonu"
 
-        versionCode = 35
-        versionName = "0.20.4"
+        versionCode = 37
+        versionName = "0.21.1"
 
         buildConfigField("boolean", "TELEMETRY_INCLUDED", "${Config.includeTelemetry}")
         buildConfigField("boolean", "UPDATER_ENABLED", "${Config.enableUpdater}")
@@ -205,6 +205,7 @@ dependencies {
     baselineProfile(projects.baselineProfile)
 
     implementation(projects.i18n)
+    implementation(projects.icons.customMaterialSymbols)
     implementation(projects.icons.materialSymbols)
     implementation(projects.icons.simpleIcons)
     implementation(projects.core.archive)
@@ -289,8 +290,6 @@ dependencies {
         exclude(module = "image-decoder")
     }
     implementation(libs.image.decoder)
-
-    implementation(libs.webgpuviewer)
 
     // UI libraries
     implementation(libs.material)

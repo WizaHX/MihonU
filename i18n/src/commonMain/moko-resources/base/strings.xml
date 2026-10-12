@@ -348,8 +348,6 @@
     <string name="ext_filtered">Filtered</string>
     <string name="ext_not_loaded">Not loaded</string>
     <string name="ext_not_loaded_dialog">Couldn\'t load</string>
-    <string name="ext_install_error">Couldn\'t install</string>
-    <string name="ext_install_error_details">Why it failed</string>
     <string name="ext_not_loaded_details">Why it isn\'t loaded</string>
     <string name="ext_copy_stacktrace">Copy stack trace</string>
     <string name="ext_filtered_message">This extension\'s content warning isn\'t one you chose to load, so its sources aren\'t available.</string>
@@ -412,6 +410,8 @@
     <string name="pref_double_tap_zoom">Double tap to zoom</string>
     <string name="pref_cutout_short">Show content in cutout area</string>
     <string name="pref_page_transitions">Animate page transitions</string>
+    <string name="pref_load_ahead_only_over_wifi">Load ahead only on Wi-Fi</string>
+    <string name="pref_load_ahead_only_over_wifi_summary">Saves mobile data by loading only the pages near the one you\'re reading</string>
     <string name="pref_flash_page">Flash on page change</string>
     <string name="pref_flash_page_summ">Reduces ghosting on e-ink displays</string>
     <string name="pref_flash_duration">Flash duration</string>
@@ -428,7 +428,9 @@
     <string name="pref_webtoon_vertical_navigator_on_left">Place vertical navigator on the left side</string>
     <string name="pref_show_reading_mode">Show reading mode</string>
     <string name="pref_show_reading_mode_summary">Briefly show current mode when reader is opened</string>
-    <string name="pref_high_quality_renderer">Use high quality renderer</string>
+    <string name="pref_hardware_bitmap_threshold">Custom hardware bitmap threshold</string>
+    <string name="pref_hardware_bitmap_threshold_default">Default (%d)</string>
+    <string name="pref_hardware_bitmap_threshold_summary">If reader loads a blank image incrementally reduce the threshold.\nSelected: %s</string>
     <string name="pref_display_profile">Custom display profile</string>
     <string name="pref_crop_borders">Crop borders</string>
     <string name="pref_custom_brightness">Custom brightness</string>
@@ -518,34 +520,6 @@
     <string name="pref_low">Low</string>
     <string name="pref_lowest">Lowest</string>
     <string name="pref_webtoon_disable_zoom_out">Disable zoom out</string>
-    <string name="webgpu_viewer">WebGPU</string>
-    <string name="pref_transition_animation">Transition animation</string>
-    <string name="pref_transition_animation_dual">Transition animation (dual)</string>
-    <string name="transition_animation_basic">Basic</string>
-    <string name="transition_animation_flip_left">Page flip (left)</string>
-    <string name="transition_animation_flip_right">Page flip (right)</string>
-    <string name="transition_animation_stack_left">Stack (left)</string>
-    <string name="transition_animation_stack_right">Stack (right)</string>
-    <string name="transition_animation_stack_up">Stack (up)</string>
-    <string name="transition_animation_stack_down">Stack (down)</string>
-    <string name="transition_animation_sphere">Sphere</string>
-    <string name="transition_animation_cube_inside">Cube (Inside)</string>
-    <string name="transition_animation_cube_outside">Cube (Outside)</string>
-    <string name="transition_animation_fade">Fade</string>
-    <string name="transition_animation_fade_white">Fade to white</string>
-    <string name="transition_animation_none">None</string>
-    <string name="transition_animation_flip">Page flip</string>
-    <string name="pref_cutout_mode">Display cutout mode</string>
-    <string name="pref_cutout_mode_dual">Display cutout mode (dual)</string>
-    <string name="cutout_mode_ignore">Ignore</string>
-    <string name="cutout_mode_avoid">Avoid</string>
-    <string name="cutout_mode_shift">Shift</string>
-    <string name="pref_dual_page_view">Dual page view</string>
-    <string name="dual_page_view_never">Never</string>
-    <string name="dual_page_view_always">Always</string>
-    <string name="dual_page_view_wide">When wide</string>
-    <string name="pref_continuous_minwidth">Min width</string>
-    <string name="pref_continuous_gap">Gap</string>
 
       <!-- Downloads section -->
     <string name="pref_category_delete_chapters">Delete chapters</string>
@@ -994,6 +968,9 @@
     <!--UpdateCheck-->
     <string name="update_check_confirm">Download</string>
     <string name="update_check_open">Open on GitHub</string>
+    <string name="update_check_skip">Skip this version</string>
+    <string name="update_check_skip_title">Skip %s?</string>
+    <string name="update_check_skip_message">Updates often contain bug fixes and security improvements. You won\'t be reminded about this version again, but you\'ll still be notified when a newer one is released.</string>
     <!-- reserved for future use -->
     <string name="update_check_eol">This Android version is no longer supported</string>
     <string name="update_check_no_new_updates">No new updates available</string>
@@ -1018,6 +995,8 @@
     <string name="information_webview_required">WebView is required for the app to function</string>
     <!-- Do not translate "WebView" -->
     <string name="information_webview_outdated">Please update the WebView app for better compatibility</string>
+    <!-- Do not translate "WebView" -->
+    <string name="information_webview_crashed">WebView stopped working and the page was closed</string>
     <string name="chapter_settings_updated">Updated default chapter settings</string>
 
     <!-- Download Notification -->
